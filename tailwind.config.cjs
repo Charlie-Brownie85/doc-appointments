@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 const preset = require('./tailwind-preset');
 
 module.exports = {
@@ -23,5 +25,10 @@ module.exports = {
     function initial({ addVariant }) {
       addVariant('initial', 'html :where(&)');
     },
+    plugin(({ addBase }) => {
+      addBase({
+        html: { fontSize: '15px' },
+      });
+    }),
   ],
 };

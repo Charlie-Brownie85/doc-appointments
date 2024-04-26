@@ -1,9 +1,9 @@
 const colors = {
   base: {
-    100: '#FAFAFA',
-    200: '#F8F8F8',
-    300: '#F2F2F2',
-    400: '#D9D9D9',
+    100: '#fafafa',
+    200: '#f8f8f8',
+    300: '#edeff2',
+    400: '#d9d9d9',
     500: '#b3b3b3',
     600: '#535353',
     700: '#3b3b3b',
@@ -57,8 +57,20 @@ module.exports = {
       xl: '1280px',
     },
     fontFamily: {
-      display: ['Lora', 'serif'],
-      body: ['Montserrat', 'lato', 'arial', 'sans-serif'],
+      body: [
+        'Inter',
+        '-apple-system',
+        'BlinkMacSystemFont',
+        'Segoe UI',
+        'Roboto',
+        'Oxygen',
+        'Ubuntu',
+        'Cantarell',
+        'Fira Sans',
+        'Droid Sans',
+        'Helvetica Neue',
+        'sans-serif',
+      ],
     },
     fontSize: {
       xxs: '0.625rem',
