@@ -1,19 +1,29 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 
-import { useReschedulerStore } from '../store';
+import { useRescheduleStore } from '../store';
 
-const store = useReschedulerStore();
+const props = defineProps<{
+  appointmentId: string;
+}>();
 
-const { fetchAvailableSlots } = store;
-const { availableSlots } = storeToRefs(store);
+const store = useRescheduleStore();
+
+const { fetchAvailableSlots, getAppointmentDetails } = store;
+const { availableSlots, doctor } = storeToRefs(store);
+
+onBeforeMount(() => {
+  getAppointmentDetails(props.appointmentId);
+});
 </script>
 
 <template>
-  <div class="container">
-    <h1 class="font-body text-3xl text-base-900 mb-2">
-      Rescheduler
-    </h1>
+  <div class="container mt-10">
+    <p
+      class="font-body text-base text-base-900 mb-4"
+      v-html="$t('Confirm your appointment with {doctor}', { doctor: `Dr. ${doctor.firstName} ${doctor.lastName}` })"
+    />
     <p class="font-body text-base text-base-900 mb-4">
       This is a test for the API and the util functions
     </p>

@@ -1,6 +1,6 @@
 {
   "Click the button to confirm": "Click the button to confirm",
-  "Confirm your appointment with {doctor}": "Confirm your appointment with {doctor}",
+  "Confirm your appointment with {doctor}": "Confirm your appointment with <strong>{doctor}</strong>",
   "Did you have an unexpected situation?": "Did you have an unexpected situation?",
   "Less": "Less",
   "Reschedule": "Reschedule",
