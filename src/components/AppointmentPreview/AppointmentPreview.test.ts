@@ -9,8 +9,8 @@ import { DATE_FORMATS } from '@/config';
 import type { AppointmentSlot } from '@/types';
 
 const testAppointment: AppointmentSlot = {
-  Start: '2024-04-29T09:30:00',
-  End: '2024-04-29T09:45:00',
+  start: '2024-04-29T09:30:00',
+  end: '2024-04-29T09:45:00',
 };
 
 const mocks = vi.hoisted(() => ({
@@ -50,7 +50,7 @@ describe('AppointmentPreview', () => {
   it('renders the appointment details in the proper format', () => {
     const { getByText } = setup();
 
-    const appointmentDate = new Date(testAppointment.Start);
+    const appointmentDate = new Date(testAppointment.start);
     expect(mocks.format).toHaveBeenCalledWith(appointmentDate, DATE_FORMATS.APPOINTMENT_DATE);
     expect(mocks.format).toHaveBeenCalledWith(appointmentDate, DATE_FORMATS.APPOINTMENT_TIME);
     expect(getByText('On {date} at {time}')).toBeInTheDocument();

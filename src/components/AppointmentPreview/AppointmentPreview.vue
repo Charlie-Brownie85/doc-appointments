@@ -13,8 +13,8 @@ const props = withDefaults(defineProps<{
   loading: false,
 });
 
-const appointmentDate = computed(() => (props.appointmentBooked?.Start
-  ? new Date(props.appointmentBooked?.Start)
+const appointmentDate = computed(() => (props.appointmentBooked?.start
+  ? new Date(props.appointmentBooked?.start)
   : new Date()));
 const formattedDate = computed(() => format(appointmentDate.value, DATE_FORMATS.APPOINTMENT_DATE));
 const formattedTime = computed(() => format(appointmentDate.value, DATE_FORMATS.APPOINTMENT_TIME));

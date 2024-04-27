@@ -7,7 +7,7 @@ import {
   // bookSlotEndpoint,
 } from '../api';
 
-import { apiRequest, getApiRoute } from '@/utils';
+import { apiRequest, getApiRoute, PayloadFromServer } from '@/utils';
 
 import type { AppointmentSlot, Doctor, Patient } from '@/types';
 
@@ -28,8 +28,8 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     const { appointment, dr, patientData } = await new Promise<{ appointment: AppointmentSlot, dr: Doctor, patientData: Patient }>((resolve) => {
       setTimeout(() => {
         const appointmentData: AppointmentSlot = {
-          Start: '2024-05-24T10:30:00',
-          End: '2024-05-24T10:40:00',
+          start: '2024-05-24T10:30:00',
+          end: '2024-05-24T10:40:00',
         };
         const drData: Doctor = {
           id: 1,
@@ -53,7 +53,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
   async function fetchAvailableSlots(mondayDate: string) {
     const route = getApiRoute(availableSlotsEndpoint, { mondayDate });
     const response = await apiRequest<AppointmentSlot[]>(route);
-    availableSlots.value = response.data;
+    availableSlots.value = PayloadFromServer(response.data);
   }
 
   // async function bookSlot(slot: AppointmentSlot) {

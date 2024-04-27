@@ -41,8 +41,8 @@ describe('Reschedule store', () => {
     await store.getAppointmentDetails('1');
 
     expect(store.appointmentBooked).toEqual({
-      Start: '2024-05-24T10:30:00',
-      End: '2024-05-24T10:40:00',
+      start: '2024-05-24T10:30:00',
+      end: '2024-05-24T10:40:00',
     });
 
     expect(store.doctor).toEqual({

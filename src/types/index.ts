@@ -1,7 +1,7 @@
 export type AppointmentSlot = {
-  Start: string,
-  End: string,
-  Taken?: boolean,
+  start: string,
+  end: string,
+  taken?: boolean,
 };
 
 export type Doctor = {
