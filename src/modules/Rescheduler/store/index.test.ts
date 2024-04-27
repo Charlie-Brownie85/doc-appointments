@@ -1,15 +1,21 @@
 import { setActivePinia, createPinia } from 'pinia';
 
 import {
+  isSameDay,
+  differenceInDays,
+  isAfter,
+} from 'date-fns';
+
+import {
   availableSlotsEndpoint,
   // bookSlotEndpoint,
 } from '../api';
 
 import { useRescheduleStore } from './index';
 
-import { getApiRoute } from '@/utils';
+import { getApiRoute, groupAppointmentsByDate } from '@/utils';
 
-import { slotsResults } from '@/__mocks__/slots-results';
+import { slotsResults, slotsFor2Weeks } from '@/__mocks__/slots-results';
 
 const mockedApiRequest = vi.fn(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,9 +74,31 @@ describe('Reschedule store', () => {
     expect(mockedApiRequest).toHaveBeenCalledWith(route);
   });
 
-  it('should store the fetched available slots', async () => {
-    await store.fetchAvailableSlots('2024-05-03');
+  it('"fetchAvailableSlots" should return available slots grouped by day', async () => {
+    const response = await store.fetchAvailableSlots('2024-05-03');
 
-    expect(store.availableSlots).toEqual(slotsResults);
+    expect(response).toEqual(groupAppointmentsByDate(slotsResults));
+  });
+
+  it('"fetch7DaysAgenda" should return available slots grouped by day for 7 days starting on param date', async () => {
+    mockedApiRequest.mockImplementationOnce(() => Promise.resolve({ data: slotsFor2Weeks }));
+    const date = new Date('2024-04-22');
+    const response = await store.fetch7DaysAgenda(date);
+
+    const filteredResponse = groupAppointmentsByDate(slotsFor2Weeks).flat().filter((agendaDay) => {
+      const daysDifference = differenceInDays(agendaDay.date, date);
+      return isAfter(agendaDay.date, date) && daysDifference < 7 && !isSameDay(agendaDay.date, date);
+    });
+
+    expect(response).toEqual(filteredResponse);
+  });
+
+  it.skip('"initStore" calls "getAppointmentDetails" and "fetch7DaysAgenda" with the correct parameters', async () => {
+    const getAppointmentDetailsSpy = vi.spyOn(store, 'getAppointmentDetails');
+    await store.initStore('1');
+
+    expect(getAppointmentDetailsSpy).toHaveBeenCalled();
+    expect(getAppointmentDetailsSpy).toHaveBeenCalledWith('1');
+    // expect(store.fetch7DaysAgenda).toHaveBeenCalledWith(new Date());
   });
 });

@@ -17,3 +17,8 @@ export type Patient = {
   email : string,
   phone : string,
 }
+
+export type AgendaDay = {
+  date: Date,
+  availableSlots: AppointmentSlot[],
+};
