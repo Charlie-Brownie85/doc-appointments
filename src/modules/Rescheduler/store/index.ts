@@ -2,41 +2,52 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { defineStore } from 'pinia';
 
-import { availableSlotsEndpoint, bookSlotEndpoint } from '../api';
+import {
+  availableSlotsEndpoint,
+  // bookSlotEndpoint,
+} from '../api';
 
 import { apiRequest, getApiRoute } from '@/utils';
 
-import type { AppointmentSlot, Doctor } from '@/types';
+import type { AppointmentSlot, Doctor, Patient } from '@/types';
 
 export const useRescheduleStore = defineStore('reschedule', () => {
   const appointmentBooked: Ref<AppointmentSlot> = ref({} as AppointmentSlot);
   const doctor: Ref<Doctor> = ref({} as Doctor);
+  const patient: Ref<Patient> = ref({} as Patient);
 
   const availableSlots = ref<AppointmentSlot[]>([]);
 
   /**
   * This function should be in charge of retrieving the current
-  * appointment info to be rescheduled, including the doctor and
-  * the time slot booked.
+  * appointment info to be rescheduled, including the patient data, doctor
+  * and time slot booked.
   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function getAppointmentDetails(appointmentId: string) {
-    const { appointment, dr } = await new Promise<{ appointment: AppointmentSlot; dr: Doctor }>((resolve) => {
+    const { appointment, dr, patientData } = await new Promise<{ appointment: AppointmentSlot, dr: Doctor, patientData: Patient }>((resolve) => {
       setTimeout(() => {
         const appointmentData: AppointmentSlot = {
           Start: '2024-05-24T10:30:00',
-          End: '2024-05-24T11:40:00',
+          End: '2024-05-24T10:40:00',
         };
         const drData: Doctor = {
           id: 1,
           firstName: 'Simeon',
           lastName: 'Molas',
         };
-        resolve({ appointment: appointmentData, dr: drData });
+        const pData: Patient = {
+          name: 'John',
+          secondName: 'Doe',
+          email: 'johndoe@email.com',
+          phone: '123456789',
+        };
+        resolve({ appointment: appointmentData, dr: drData, patientData: pData });
       }, 100);
     });
     appointmentBooked.value = appointment;
     doctor.value = dr;
+    patient.value = patientData;
   }
 
   async function fetchAvailableSlots(mondayDate: string) {
@@ -45,16 +56,17 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     availableSlots.value = response.data;
   }
 
-  async function bookSlot(slot: AppointmentSlot) {
-    await apiRequest<void>(bookSlotEndpoint, { requestMethod: 'post', data: slot });
-  }
+  // async function bookSlot(slot: AppointmentSlot) {
+  //   await apiRequest<void>(bookSlotEndpoint, { requestMethod: 'post', data: slot });
+  // }
 
   return {
     appointmentBooked,
     doctor,
+    patient,
     availableSlots,
     getAppointmentDetails,
     fetchAvailableSlots,
-    bookSlot,
+    // bookSlot,
   };
 });
