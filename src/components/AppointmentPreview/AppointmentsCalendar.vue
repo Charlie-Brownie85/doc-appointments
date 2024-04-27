@@ -11,7 +11,9 @@ import {
 
 import i18n from '@/i18n';
 
-import type { AppointmentSlot, AgendaDay } from '@/types';
+import { DATE_FORMATS } from '@/config';
+
+import type { AgendaDay } from '@/types';
 
 export interface Props {
   startingDate: Date,
@@ -26,6 +28,15 @@ const { t } = i18n.global;
 
 const days = computed(() => Array.from({ length: 7 }, (_, i) => addDays(props.startingDate, i)));
 
+const agendaDays = computed(() => days.value.map((day) => {
+  const response = props.availableSlots.find((agendaDay) => isSameDay(agendaDay.date, day));
+
+  return {
+    date: day,
+    availableSlots: response?.availableSlots || [],
+  };
+}));
+
 const isPrevDisabled = computed(() => isToday(props.startingDate));
 
 function formatWeekDay(date: Date): string {
@@ -38,19 +49,19 @@ function formatWeekDay(date: Date): string {
   }
 
   // TODO: locale options to translate this
-  return formatDFNS(date, 'EEE');
+  return formatDFNS(date, DATE_FORMATS.CALENDAR_WEEK_DAY);
 }
 </script>
 
 <template>
-  <div class="w-full px-4 py-8 bg-white rounded-md shadow-sm mb-4">
+  <div class="w-full p-8 bg-white rounded-md shadow-sm mb-4">
     <div
-      class="w-full flex items-center"
+      class="w-full grid grid-cols-[8%_1fr_8%] justify-items-center items-center mb-4"
       data-testid="calendarHeader"
     >
       <button
         type="button"
-        class="control-btn"
+        class="control-btn justify-self-start"
         @click="emit('previousWeekRequested')"
         :disabled="isPrevDisabled"
       >
@@ -70,13 +81,13 @@ function formatWeekDay(date: Date): string {
             {{ formatWeekDay(day) }}
           </span>
           <span class="font-body text-sm text-doc-blue-800">
-            {{ formatDFNS(day, 'dd MMM') }}
+            {{ formatDFNS(day, DATE_FORMATS.CALENDAR_DATE) }}
           </span>
         </div>
       </div>
       <button
         type="button"
-        class="control-btn"
+        class="control-btn justify-self-end"
         @click="emit('nextWeekRequested')"
       >
         <SVGIcon
@@ -85,6 +96,28 @@ function formatWeekDay(date: Date): string {
           class="w-4 h-4 -rotate-90"
         />
       </button>
+    </div>
+    <div
+      class="w-full grid grid-cols-[8%_1fr_8%] justify-items-center items-center"
+      data-testid="calendarBody"
+    >
+      <div class="slots-container col-start-2 w-full grid grid-cols-7">
+        <div
+          v-for="day in agendaDays"
+          :key="day.date.toDateString()"
+          class="flex flex-col items-center gap-4"
+        >
+          <div
+            v-for="slot in day.availableSlots"
+            :key="slot.start"
+            class="appointment-slot"
+            :class="{ 'appointment-slot--taken': slot.taken }"
+            @click="() => emit('slotSelected', slot)"
+          >
+            <span>{{ formatDFNS(slot.start, DATE_FORMATS.APPOINTMENT_TIME) }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -97,6 +130,27 @@ function formatWeekDay(date: Date): string {
 
   &:disabled {
     @apply cursor-not-allowed bg-base-200 text-doc-blue-300;
+  }
+}
+
+.appointment-slot {
+  @apply px-4 py-1 flex justify-center items-center border-2 border-transparent bg-doc-blue-200 cursor-pointer rounded-md;
+  transition: border-color 0.3s ease;
+
+  &:hover:not(.appointment-slot--taken) {
+    @apply border-doc-blue-500;
+  }
+
+  span {
+    @apply font-body font-medium text-doc-blue-500 select-none;
+  }
+
+  &--taken {
+    @apply bg-transparent cursor-not-allowed;
+
+    span {
+      @apply text-base-500 line-through;
+    }
   }
 }
 </style>
