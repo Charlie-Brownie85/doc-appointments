@@ -5,13 +5,13 @@ import { storeToRefs } from 'pinia';
 import { useRescheduleStore } from '../store';
 
 const props = defineProps<{
-  appointmentId: string;
+  appointmentId: string,
 }>();
 
 const store = useRescheduleStore();
 
 const { fetchAvailableSlots, getAppointmentDetails } = store;
-const { availableSlots, doctor } = storeToRefs(store);
+const { availableSlots, doctor, appointmentBooked } = storeToRefs(store);
 
 onBeforeMount(() => {
   getAppointmentDetails(props.appointmentId);
@@ -21,8 +21,12 @@ onBeforeMount(() => {
 <template>
   <div class="container mt-10">
     <p
-      class="font-body text-base text-base-900 mb-4"
+      class="font-body text-lg text-doc-blue-800 mb-8"
       v-html="$t('Confirm your appointment with {doctor}', { doctor: `Dr. ${doctor.firstName} ${doctor.lastName}` })"
+    />
+    <AppointmentPreview
+      v-if="appointmentBooked"
+      :appointment-booked="appointmentBooked"
     />
     <p class="font-body text-base text-base-900 mb-4">
       This is a test for the API and the util functions

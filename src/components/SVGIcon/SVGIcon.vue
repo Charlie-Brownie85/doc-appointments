@@ -2,8 +2,8 @@
 import { defineAsyncComponent } from 'vue';
 
 const props = withDefaults(defineProps<{
-  name: string;
-  color?: string
+  name: string,
+  color?: string,
 }>(), {
   color: 'black',
 });
