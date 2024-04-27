@@ -1,13 +1,15 @@
 import apiRequest from './apiRequest';
 import type { ApiRequestOptions } from './apiRequest';
 
+import { apiURL } from '@/config';
+
 const mocks = vi.hoisted(() => ({
   mockedHttpClient: {
     request: vi.fn(),
   },
 }));
 
-vi.mock('@/composables/useAuth', () => ({
+vi.mock('@/composables/useHttpClient', () => ({
   useHttpClient: vi.fn().mockReturnValue(mocks.mockedHttpClient),
 }));
 
@@ -28,9 +30,9 @@ describe('apiRequest', () => {
     expect(mocks.mockedHttpClient.request).toHaveBeenCalledWith({
       url,
       method: requestOptions.requestMethod,
-      baseURL: 'https://api.spotify.com/v1',
+      baseURL: apiURL.base,
       params: { id: 1 },
-      paramsSerializer: expect.any(Function),
+      data: undefined,
     });
   });
 
@@ -46,10 +48,9 @@ describe('apiRequest', () => {
     expect(mocks.mockedHttpClient.request).toHaveBeenCalledWith({
       url,
       method: requestOptions.requestMethod,
-      baseURL: 'https://api.spotify.com/v1',
+      baseURL: apiURL.base,
       data: { id: 1 },
       params: undefined,
-      paramsSerializer: expect.any(Function),
     });
   });
 
@@ -61,9 +62,9 @@ describe('apiRequest', () => {
     expect(mocks.mockedHttpClient.request).toHaveBeenCalledWith({
       url,
       method: 'get',
-      baseURL: 'https://api.spotify.com/v1',
+      baseURL: apiURL.base,
       params: undefined,
-      paramsSerializer: expect.any(Function),
+      data: undefined,
     });
   });
 });
