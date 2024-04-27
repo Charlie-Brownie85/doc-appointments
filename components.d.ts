@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppointmentPreview: typeof import('./src/components/AppointmentPreview/AppointmentPreview.vue')['default']
+    AppointmentsCalendar: typeof import('./src/components/AppointmentPreview/AppointmentsCalendar.vue')['default']
     SVGIcon: typeof import('./src/components/SVGIcon/SVGIcon.vue')['default']
   }
 }

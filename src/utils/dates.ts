@@ -1,12 +1,13 @@
 import {
   nextMonday as getNextMonday,
   previousMonday,
+  isMonday,
 } from 'date-fns';
 
 import type { AppointmentSlot, AgendaDay } from '@/types';
 
 export function getMondays(date: Date): Date[] {
-  if (date.getDay() === 1) {
+  if (isMonday(date)) {
     return [date];
   }
   const pastMonday = previousMonday(date);

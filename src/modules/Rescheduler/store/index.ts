@@ -117,6 +117,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     fetchAvailableSlots, // exposed for testing purposes
     getAppointmentDetails,
     initStore,
+    startingDate,
     fetch7DaysAgenda, // exposed for testing purposes
     fetchAgendaForNext7Days,
     fetchAgendaForPrevious7Days,
