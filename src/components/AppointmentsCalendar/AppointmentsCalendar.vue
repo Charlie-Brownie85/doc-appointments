@@ -92,10 +92,10 @@ function selectSlot(slot: AppointmentSlot) {
             :key="day.toDateString()"
             class="flex flex-col items-center"
           >
-            <span class="font-body font-medium text-doc-blue-800">
+            <span class="font-body font-medium text-doc-blue-800 select-none">
               {{ formatWeekDay(day) }}
             </span>
-            <span class="font-body text-sm text-doc-blue-800">
+            <span class="font-body text-sm text-doc-blue-800 select-none">
               {{ formatDFNS(day, DATE_FORMATS.CALENDAR_DATE) }}
             </span>
           </div>

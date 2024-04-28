@@ -13,5 +13,6 @@ declare module 'vue' {
     AppointmentTimeSlot: typeof import('./src/components/AppointmentsCalendar/AppointmentTimeSlot/AppointmentTimeSlot.vue')['default']
     SVGIcon: typeof import('./src/components/SVGIcon/SVGIcon.vue')['default']
     TheFooter: typeof import('./src/components/TheFooter/TheFooter.vue')['default']
+    VModal: typeof import('./src/components/VModal/VModal.vue')['default']
   }
 }

@@ -30,6 +30,7 @@ const {
 } = storeToRefs(store);
 
 const fetchingError = ref(false);
+const bookingError = ref(false);
 
 function selectSlot(slot: AppointmentSlot) {
   rescheduledSlotSelected.value = slot;
@@ -44,7 +45,16 @@ async function fetchAvailableSlots(when: 'next' | 'previous') {
   }
 }
 
+async function requestSlotBooking(slot: AppointmentSlot) {
+  try {
+    await bookSlot(slot);
+  } catch (error) {
+    bookingError.value = true;
+  }
+}
+
 onBeforeMount(() => {
+  // TODO: handle init error. In a larger project this should navigate to error view
   initStore(props.appointmentId);
 });
 </script>
@@ -81,12 +91,28 @@ onBeforeMount(() => {
       v-if="!!rescheduledSlotSelected"
       :appointment-selected="rescheduledSlotSelected"
       :loading="isBookingSlot"
-      @booking-requested="bookSlot"
+      @booking-requested="requestSlotBooking"
       class="my-8"
     />
   </div>
+  <VModal
+    v-model="bookingError"
+    class="text-doc-blue-900"
+  >
+    <template #content>
+      <div class="flex justify-center items-center">
+        <p class="font-bofy font-normal text-doc-blue-900 text-lg">
+          {{ $t('An error occurred while booking your appointment.') }}
+        </p>
+      </div>
+    </template>
+    <template #actions="{ close }">
+      <button
+        class="bg-transparent text-state-error-500 border border-state-error-500 font-body font-semibold px-4 py-2 rounded-md hover:bg-state-error-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-state-error-500 focus:ring-opacity-50 transition-colors duration-300 ease-in-out"
+        @click="close"
+      >
+        {{ $t('Please try again') }}
+      </button>
+    </template>
+  </VModal>
 </template>
-
-<style lang="postcss" scoped>
-
-</style>

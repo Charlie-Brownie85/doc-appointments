@@ -1,10 +1,12 @@
 {
+  "An error occurred while booking your appointment.": "An error occurred while booking your appointment.",
   "An error occurred while fetching the available slots.": "An error occurred while fetching the available slots.",
   "Click the button to confirm": "Click the button to confirm",
   "Confirm your appointment with {doctor}": "Confirm your appointment with <strong>{doctor}</strong>",
   "Did you have an unexpected situation?": "Did you have an unexpected situation?",
   "Less": "Less",
   "On {date} at {time}": "On {date} at {time}",
+  "Please try again": "Please try again",
   "Reschedule": "Reschedule",
   "See more hours": "See more hours",
   "Today": "Today",
