@@ -13,7 +13,7 @@ import {
 
 import {
   availableSlotsEndpoint,
-  // bookSlotEndpoint,
+  bookSlotEndpoint,
 } from '../api';
 
 import { DATE_FORMATS } from '@/config';
@@ -24,6 +24,7 @@ import {
   PayloadFromServer,
   getMondays,
   groupAppointmentsByDate,
+  formatDateForApi,
 } from '@/utils';
 
 import type {
@@ -40,6 +41,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
 
   const startingDate = ref(new Date());
   const rescheduledSlotSelected: Ref<AppointmentSlot | null> = ref(null);
+  const isBookingSlot = ref(false);
   const availableSlots = ref<AgendaDay[]>([]);
 
   /**
@@ -61,10 +63,10 @@ export const useRescheduleStore = defineStore('reschedule', () => {
           lastName: 'Molas',
         };
         const pData: Patient = {
-          name: 'John',
-          secondName: 'Doe',
-          email: 'johndoe@email.com',
-          phone: '123456789',
+          name: 'Rick',
+          secondName: 'Sanchez',
+          email: 'ricksanchez@email.com',
+          phone: '+123456789',
         };
         resolve({ appointment: appointmentData, dr: drData, patientData: pData });
       }, 100);
@@ -106,9 +108,29 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     availableSlots.value = await fetch7DaysAgenda(startingDate.value);
   }
 
-  // async function bookSlot(slot: AppointmentSlot) {
-  //   await apiRequest<void>(bookSlotEndpoint, { requestMethod: 'post', data: slot });
-  // }
+  async function bookSlot(slot: AppointmentSlot) {
+    isBookingSlot.value = true;
+
+    const payload = {
+      start: formatDateForApi(slot.start),
+      end: formatDateForApi(slot.end),
+      comments: 'Rescheduled appointment',
+      patient: {
+        name: patient.value.name,
+        secondName: patient.value.secondName,
+        email: patient.value.email,
+        phone: patient.value.phone,
+      },
+    };
+
+    try {
+      await apiRequest<void>(bookSlotEndpoint, { requestMethod: 'post', data: payload });
+    } finally {
+      availableSlots.value = await fetch7DaysAgenda(startingDate.value); // refetch data to update it
+      rescheduledSlotSelected.value = null;
+      isBookingSlot.value = false;
+    }
+  }
 
   return {
     appointmentBooked,
@@ -123,6 +145,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     fetch7DaysAgenda, // exposed for testing purposes
     fetchAgendaForNext7Days,
     fetchAgendaForPrevious7Days,
-    // bookSlot,
+    bookSlot,
+    isBookingSlot,
   };
 });

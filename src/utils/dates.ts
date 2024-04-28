@@ -2,6 +2,8 @@ import {
   nextMonday as getNextMonday,
   previousMonday,
   isMonday,
+  format,
+  isValid,
 } from 'date-fns';
 
 import type { AppointmentSlot, AgendaDay } from '@/types';
@@ -32,4 +34,12 @@ export function groupAppointmentsByDate(appointments: AppointmentSlot[]): Agenda
     }
     return acc;
   }, [] as AgendaDay[]);
+}
+
+export function formatDateForApi(date: Date | string): string {
+  if (!isValid(new Date(date))) {
+    throw new Error('Invalid date provided');
+  }
+
+  return format(new Date(date), 'yyyy-MM-dd HH:mm:ss');
 }

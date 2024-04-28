@@ -25,7 +25,7 @@ function selectSlot() {
     class="appointment-time-slot"
     :class="{
       'appointment-time-slot--taken': appointmentSlot?.taken,
-      'appointment-time-slot--selected': isSelected,
+      'appointment-time-slot--selected': isSelected && !appointmentSlot?.taken,
     }"
     data-testid="appointment-time-slot"
     @click="selectSlot"

@@ -16,6 +16,7 @@ const {
   initStore,
   fetchAgendaForNext7Days,
   fetchAgendaForPrevious7Days,
+  bookSlot,
 } = store;
 
 const {
@@ -24,6 +25,7 @@ const {
   rescheduledSlotSelected,
   availableSlots,
   startingDate,
+  isBookingSlot,
 } = storeToRefs(store);
 
 function selectSlot(slot: AppointmentSlot) {
@@ -44,6 +46,7 @@ onBeforeMount(() => {
     <AppointmentPreview
       v-if="appointmentBooked"
       :appointment-booked="appointmentBooked"
+      :loading="isBookingSlot"
     />
     <div class="my-8 font-body text-lg text-doc-blue-800">
       <p class="font-bold">
@@ -63,6 +66,8 @@ onBeforeMount(() => {
     <AppointmentRescheduler
       v-if="!!rescheduledSlotSelected"
       :appointment-selected="rescheduledSlotSelected"
+      :loading="isBookingSlot"
+      @booking-requested="bookSlot"
       class="my-8"
     />
   </div>
