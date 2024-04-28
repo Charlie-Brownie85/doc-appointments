@@ -22,6 +22,7 @@ import {
   apiRequest,
   getApiRoute,
   PayloadFromServer,
+  PayloadToServer,
   getMondays,
   groupAppointmentsByDate,
   formatDateForApi,
@@ -119,7 +120,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
   async function bookSlot(slot: AppointmentSlot) {
     isBookingSlot.value = true;
 
-    const payload = {
+    const payload = PayloadToServer({
       start: formatDateForApi(slot.start),
       end: formatDateForApi(slot.end),
       comments: 'Rescheduled appointment',
@@ -129,7 +130,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
         email: patient.value.email,
         phone: patient.value.phone,
       },
-    };
+    });
 
     try {
       await apiRequest<void>(bookSlotEndpoint, { requestMethod: 'post', data: payload });
@@ -144,7 +145,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     appointmentBooked,
     rescheduledSlotSelected,
     doctor,
-    patient,
+    patient, // exposed for testing purposes
     availableSlots,
     fetchAvailableSlots, // exposed for testing purposes
     getAppointmentDetails,

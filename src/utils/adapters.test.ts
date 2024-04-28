@@ -2,15 +2,15 @@ import { PayloadFromServer, PayloadToServer } from './adapters';
 
 const capitalizedObj = {
   Id: 1,
-  Name: 'John Doe',
-  Email: 'johndoe@email.com',
+  Name: 'Rick Sanchez',
+  Email: 'ricksanchez@email.com',
   Phone: '123456789',
 };
 
 const lowerCaseObj = {
   id: 1,
-  name: 'John Doe',
-  email: 'johndoe@email.com',
+  name: 'Rick Sanchez',
+  email: 'ricksanchez@email.com',
   phone: '123456789',
 };
 

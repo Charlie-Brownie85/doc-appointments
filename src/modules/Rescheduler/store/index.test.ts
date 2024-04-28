@@ -4,16 +4,21 @@ import {
   isSameDay,
   differenceInDays,
   isAfter,
+  format,
+  addDays,
+  subDays,
 } from 'date-fns';
 
 import {
   availableSlotsEndpoint,
-  // bookSlotEndpoint,
+  bookSlotEndpoint,
 } from '../api';
 
 import { useRescheduleStore } from './index';
 
-import { getApiRoute, groupAppointmentsByDate } from '@/utils';
+import { DATE_FORMATS } from '@/config';
+
+import { getApiRoute, groupAppointmentsByDate, getMondays } from '@/utils';
 
 import { slotsResults, slotsFor2Weeks } from '@/__mocks__/slots-results';
 
@@ -31,6 +36,24 @@ vi.mock('@/utils', async () => {
   };
 });
 
+const initialAppointmentDetails = {
+  appointmentBooked: {
+    start: '2024-05-24T10:30:00',
+    end: '2024-05-24T10:40:00',
+  },
+  doctor: {
+    id: 1,
+    firstName: 'Simeon',
+    lastName: 'Molas',
+  },
+  patient: {
+    name: 'Rick',
+    secondName: 'Sanchez',
+    email: 'ricksanchez@email.com',
+    phone: '+123456789',
+  },
+};
+
 describe('Reschedule store', () => {
   let store: ReturnType<typeof useRescheduleStore>;
 
@@ -46,23 +69,9 @@ describe('Reschedule store', () => {
   it('should fetch correct appointment details', async () => {
     await store.getAppointmentDetails('1');
 
-    expect(store.appointmentBooked).toEqual({
-      start: '2024-05-24T10:30:00',
-      end: '2024-05-24T10:40:00',
-    });
-
-    expect(store.doctor).toEqual({
-      id: 1,
-      firstName: 'Simeon',
-      lastName: 'Molas',
-    });
-
-    expect(store.patient).toEqual({
-      name: 'John',
-      secondName: 'Doe',
-      email: 'johndoe@email.com',
-      phone: '123456789',
-    });
+    expect(store.appointmentBooked).toEqual(initialAppointmentDetails.appointmentBooked);
+    expect(store.doctor).toEqual(initialAppointmentDetails.doctor);
+    expect(store.patient).toEqual(initialAppointmentDetails.patient);
   });
 
   it('should call the available slots endpoint with the correct parameters', async () => {
@@ -93,12 +102,74 @@ describe('Reschedule store', () => {
     expect(response).toEqual(filteredResponse);
   });
 
-  it.skip('"initStore" calls "getAppointmentDetails" and "fetch7DaysAgenda" with the correct parameters', async () => {
-    const getAppointmentDetailsSpy = vi.spyOn(store, 'getAppointmentDetails');
+  it('"fetchAgendaForNext7Days" should return available slots grouped by day for next 7 days after initial date', async () => {
+    const nextWeek = addDays(new Date(), 7);
+    await store.fetchAgendaForNext7Days();
+
+    const mondays = getMondays(nextWeek);
+    const route = getApiRoute(availableSlotsEndpoint, { mondayDate: format(mondays[0], DATE_FORMATS.SLOTS_REQUEST) });
+
+    expect(mockedApiRequest).toHaveBeenCalledWith(route);
+  });
+
+  it('"fetchAgendaForPrevious7Days" should return available slots grouped by day for next 7 days after initial date', async () => {
+    const nextWeek = subDays(new Date(), 7);
+    await store.fetchAgendaForPrevious7Days();
+
+    const mondays = getMondays(nextWeek);
+    const route = getApiRoute(availableSlotsEndpoint, { mondayDate: format(mondays[0], DATE_FORMATS.SLOTS_REQUEST) });
+
+    expect(mockedApiRequest).toHaveBeenCalledWith(route);
+  });
+
+  it('"initStore" should fill initial appointment details', async () => {
+    expect(store.doctor).toStrictEqual({});
+    expect(store.patient).toStrictEqual({});
+    expect(store.appointmentBooked).toStrictEqual({});
+
     await store.initStore('1');
 
-    expect(getAppointmentDetailsSpy).toHaveBeenCalled();
-    expect(getAppointmentDetailsSpy).toHaveBeenCalledWith('1');
-    // expect(store.fetch7DaysAgenda).toHaveBeenCalledWith(new Date());
+    expect(store.appointmentBooked).toEqual(initialAppointmentDetails.appointmentBooked);
+    expect(store.doctor).toEqual(initialAppointmentDetails.doctor);
+    expect(store.patient).toEqual(initialAppointmentDetails.patient);
+  });
+
+  it('"initStore" should call "fetch7DaysAgenda" with the correct parameters', async () => {
+    await store.initStore('1');
+
+    const date = new Date();
+    const mondays = getMondays(date);
+    const route = getApiRoute(availableSlotsEndpoint, { mondayDate: format(mondays[0], DATE_FORMATS.SLOTS_REQUEST) });
+
+    expect(mockedApiRequest).toHaveBeenCalledWith(route);
+  });
+
+  it('calls booking endpoint with correct parameters', async () => {
+    const rescheduledSlot = {
+      start: '2024-06-01T10:30:00',
+      end: '2024-06-01T10:40:00',
+    };
+
+    await store.initStore('1');
+
+    const payload = {
+      Start: '2024-06-01 10:30:00',
+      End: '2024-06-01 10:40:00',
+      Comments: 'Rescheduled appointment',
+      Patient: {
+        Name: initialAppointmentDetails.patient.name,
+        SecondName: initialAppointmentDetails.patient.secondName,
+        Email: initialAppointmentDetails.patient.email,
+        Phone: initialAppointmentDetails.patient.phone,
+      },
+    };
+
+    await store.bookSlot(rescheduledSlot);
+
+    expect(mockedApiRequest).toHaveBeenNthCalledWith(
+      2,
+      bookSlotEndpoint,
+      { data: payload, requestMethod: 'post' },
+    );
   });
 });
