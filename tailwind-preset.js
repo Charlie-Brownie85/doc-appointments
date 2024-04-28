@@ -20,9 +20,10 @@ const colors = {
       100: '#eff4fd',
       200: '#e0e9fb',
       300: '#a7c9e7',
-      400: '#5bbad5',
-      500: '#3d83df',
-      600: '#1662c6',
+      400: '#709ee1',
+      500: '#5bbad5',
+      600: '#3d83df',
+      700: '#1662c6',
       800: '#2c3e50',
       900: '#1b2734',
     },
@@ -111,6 +112,11 @@ module.exports = {
       sm: '0px 1px 4px rgba(0, 0, 0, 0.2)',
       DEFAULT: '0px 1px 8px rgba(0, 0, 0, 0.1)',
       xl: '0px 0px 16px rgba(0, 0, 0, 0.15)',
+    },
+    sizes: {
+      footer: {
+        height: '4rem',
+      },
     },
     extend: {
       ringOffsetWidth: {

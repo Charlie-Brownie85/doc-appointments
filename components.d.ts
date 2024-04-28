@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppointmentPreview: typeof import('./src/components/AppointmentPreview/AppointmentPreview.vue')['default']
+    AppointmentRescheduler: typeof import('./src/components/AppointmentRescheduler/AppointmentRescheduler.vue')['default']
     AppointmentsCalendar: typeof import('./src/components/AppointmentsCalendar/AppointmentsCalendar.vue')['default']
     AppointmentTimeSlot: typeof import('./src/components/AppointmentsCalendar/AppointmentTimeSlot/AppointmentTimeSlot.vue')['default']
     SVGIcon: typeof import('./src/components/SVGIcon/SVGIcon.vue')['default']

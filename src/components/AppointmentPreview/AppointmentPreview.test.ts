@@ -50,9 +50,8 @@ describe('AppointmentPreview', () => {
   it('renders the appointment details in the proper format', () => {
     const { getByText } = setup();
 
-    const appointmentDate = new Date(testAppointment.start);
-    expect(mocks.format).toHaveBeenCalledWith(appointmentDate, DATE_FORMATS.APPOINTMENT_DATE);
-    expect(mocks.format).toHaveBeenCalledWith(appointmentDate, DATE_FORMATS.APPOINTMENT_TIME);
+    expect(mocks.format).toHaveBeenCalledWith(testAppointment.start, DATE_FORMATS.APPOINTMENT_DATE);
+    expect(mocks.format).toHaveBeenCalledWith(testAppointment.start, DATE_FORMATS.APPOINTMENT_TIME);
     expect(getByText('On {date} at {time}')).toBeInTheDocument();
   });
 

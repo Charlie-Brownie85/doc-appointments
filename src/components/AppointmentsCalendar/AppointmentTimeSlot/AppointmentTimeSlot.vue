@@ -40,11 +40,11 @@ function selectSlot() {
   transition: border-color 0.3s ease;
 
   &:hover:not(.appointment-slot--taken) {
-    @apply border-doc-blue-500;
+    @apply border-doc-blue-600;
   }
 
   span {
-    @apply font-body font-medium text-doc-blue-500 select-none;
+    @apply font-body font-medium text-doc-blue-600 select-none;
   }
 
   &--taken {
@@ -56,7 +56,7 @@ function selectSlot() {
   }
 
   &--selected {
-    @apply bg-doc-blue-500;
+    @apply bg-doc-blue-600;
 
     span {
       @apply text-white;

@@ -8,5 +8,6 @@
   "See more hours": "See more hours",
   "Today": "Today",
   "Tomorrow": "Tomorrow",
-  "You can change the appointment for when it suits you better.": "You can change the appointment for when it suits you better."
+  "You can change the appointment for when it suits you better.": "You can change the appointment for when it suits you better.",
+  "{date} at {time}": "{date} at {time}"
 }

@@ -5,7 +5,7 @@ const hardcodedAppointmentId = '123';
 </script>
 
 <template>
-  <div class="max-w-7xl my-0 mx-auto p-8 font-normal">
+  <div class="max-w-7xl my-0 mx-auto p-8 font-normal app-container">
     <!-- In larger apps here it will be routerLink etc -->
     <!-- The props for the view could be passed by route params instead. For this example there are hardcoded -->
     <RescheduleView :appointment-id="hardcodedAppointmentId" />
@@ -14,5 +14,7 @@ const hardcodedAppointmentId = '123';
 </template>
 
 <style lang="postcss" scoped>
-
+.app-container {
+  min-height: calc(100vh - theme('sizes.footer.height'));
+}
 </style>

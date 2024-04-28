@@ -63,7 +63,7 @@ function selectSlot(slot: AppointmentSlot) {
 </script>
 
 <template>
-  <div class="w-full p-8 bg-white rounded-md shadow-sm mb-4">
+  <div class="w-full pt-8 pb-4 px-8 bg-white rounded-md shadow-sm">
     <div
       class="w-full grid grid-cols-[8%_1fr_8%] justify-items-center items-center mb-4"
       data-testid="calendarHeader"
@@ -107,7 +107,7 @@ function selectSlot(slot: AppointmentSlot) {
       </button>
     </div>
     <div
-      class="w-full grid grid-cols-[8%_1fr_8%] grid-rows-[1fr_3.75rem] justify-items-center items-center"
+      class="w-full grid grid-cols-[8%_1fr_8%] grid-rows-[1fr_3.25rem] justify-items-center items-center"
       data-testid="calendarBody"
     >
       <div
@@ -134,7 +134,7 @@ function selectSlot(slot: AppointmentSlot) {
       >
         <button
           type="button"
-          class="bg-transparent text-doc-blue-500 hover:underline flex justify-center items-center gap-2"
+          class="bg-transparent text-doc-blue-600 hover:underline flex justify-center items-center gap-2"
           @click="isFolded = !isFolded"
         >
           <span class="text-base font-body font-semibold">{{ isFolded ? $t('See more hours') : $t('Less') }}</span>
@@ -152,7 +152,7 @@ function selectSlot(slot: AppointmentSlot) {
 
 <style lang="postcss" scoped>
 .control-btn {
-  @apply cursor-pointer bg-doc-blue-100 hover:bg-doc-blue-200 text-doc-blue-500;
+  @apply cursor-pointer bg-doc-blue-100 hover:bg-doc-blue-200 text-doc-blue-600;
   @apply flex justify-center items-center p-2 rounded-full min-w-8 min-h-8;
   transition: background-color 0.3s ease;
 
@@ -163,7 +163,7 @@ function selectSlot(slot: AppointmentSlot) {
 
 .slots-container {
   @apply col-start-2 w-full row-start-1 grid grid-cols-7 border-b-2 border-base-300;
-  @apply max-h-[40vh] min-h-[40vh] h-full overflow-hidden;
+  @apply max-h-[20rem] min-h-[20rem] h-full overflow-hidden;
   transition: max-height 0.5s ease-in-out;
 
   &--expanded {

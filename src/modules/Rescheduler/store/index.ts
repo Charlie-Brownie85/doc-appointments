@@ -39,6 +39,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
   const patient: Ref<Patient> = ref({} as Patient);
 
   const startingDate = ref(new Date());
+  const rescheduledSlotSelected: Ref<AppointmentSlot | null> = ref(null);
   const availableSlots = ref<AgendaDay[]>([]);
 
   /**
@@ -111,6 +112,7 @@ export const useRescheduleStore = defineStore('reschedule', () => {
 
   return {
     appointmentBooked,
+    rescheduledSlotSelected,
     doctor,
     patient,
     availableSlots,
