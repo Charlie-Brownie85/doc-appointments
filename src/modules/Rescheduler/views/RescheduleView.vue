@@ -42,7 +42,7 @@ onBeforeMount(() => {
     <AppointmentsCalendar
       :starting-date="startingDate"
       :available-slots="availableSlots"
-      @slot-selected="() => console.log('slot selected')"
+      @slot-selected="(e) => console.log('slot selected: ', e)"
       @previous-week-requested="() => console.log('previous week requested')"
       @next-week-requested="() => console.log('next week requested')"
     />

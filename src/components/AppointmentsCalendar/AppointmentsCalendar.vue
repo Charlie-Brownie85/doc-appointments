@@ -28,6 +28,8 @@ const { t } = i18n.global;
 
 const isFolded = ref(true);
 
+const slotSelected = ref<AppointmentSlot | null>(null);
+
 const days = computed(() => Array.from({ length: 7 }, (_, i) => addDays(props.startingDate, i)));
 
 const agendaDays = computed(() => days.value.map((day) => {
@@ -55,7 +57,8 @@ function formatWeekDay(date: Date): string {
 }
 
 function selectSlot(slot: AppointmentSlot) {
-  emit('slotSelected', slot);
+  slotSelected.value = slot;
+  emit('slotSelected', slotSelected.value);
 }
 </script>
 
@@ -116,15 +119,13 @@ function selectSlot(slot: AppointmentSlot) {
           :key="day.date.toDateString()"
           class="flex flex-col items-center gap-4"
         >
-          <div
+          <AppointmentTimeSlot
             v-for="slot in day.availableSlots"
             :key="slot.start"
-            class="appointment-slot"
-            :class="{ 'appointment-slot--taken': slot.taken }"
-            @click="selectSlot(slot)"
-          >
-            <span>{{ formatDFNS(slot.start, DATE_FORMATS.APPOINTMENT_TIME) }}</span>
-          </div>
+            :appointment-slot="slot"
+            :is-selected="slot.start === slotSelected?.start"
+            @slot-selected="selectSlot"
+          />
         </div>
       </div>
       <div
@@ -167,27 +168,6 @@ function selectSlot(slot: AppointmentSlot) {
 
   &--expanded {
     @apply max-h-[3000px] pb-3;
-  }
-}
-
-.appointment-slot {
-  @apply px-4 py-1 flex justify-center items-center border-2 border-transparent bg-doc-blue-200 cursor-pointer rounded-md;
-  transition: border-color 0.3s ease;
-
-  &:hover:not(.appointment-slot--taken) {
-    @apply border-doc-blue-500;
-  }
-
-  span {
-    @apply font-body font-medium text-doc-blue-500 select-none;
-  }
-
-  &--taken {
-    @apply bg-transparent cursor-not-allowed;
-
-    span {
-      @apply text-base-400 line-through;
-    }
   }
 }
 
