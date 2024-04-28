@@ -61,10 +61,17 @@ onBeforeMount(() => {
 
 <template>
   <div class="container">
-    <p
+    <i18n-t
+      scope="global"
+      keypath="confirmAppointmentWith"
+      tag="p"
       class="font-body text-lg text-doc-blue-800 mb-8"
-      v-html="$t('Confirm your appointment with {doctor}', { doctor: `Dr. ${doctor.firstName} ${doctor.lastName}` })"
-    />
+      data-testid="confirmAppointmentWith"
+    >
+      <template #doctor>
+        <strong>{{ `Dr. ${doctor.firstName} ${doctor.lastName}` }}</strong>
+      </template>
+    </i18n-t>
     <AppointmentPreview
       v-if="appointmentBooked"
       :appointment-booked="appointmentBooked"

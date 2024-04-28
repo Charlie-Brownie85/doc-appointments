@@ -2,7 +2,6 @@
   "An error occurred while booking your appointment.": "An error occurred while booking your appointment.",
   "An error occurred while fetching the available slots.": "An error occurred while fetching the available slots.",
   "Click the button to confirm": "Click the button to confirm",
-  "Confirm your appointment with {doctor}": "Confirm your appointment with <strong>{doctor}</strong>",
   "Did you have an unexpected situation?": "Did you have an unexpected situation?",
   "Less": "Less",
   "On {date} at {time}": "On {date} at {time}",
@@ -12,5 +11,6 @@
   "Today": "Today",
   "Tomorrow": "Tomorrow",
   "You can change the appointment for when it suits you better.": "You can change the appointment for when it suits you better.",
+  "confirmAppointmentWith": "Confirm your appointment with {doctor}",
   "{date} at {time}": "{date} at {time}"
 }
