@@ -10,7 +10,11 @@ const props = defineProps<{
 
 const store = useRescheduleStore();
 
-const { initStore } = store;
+const {
+  initStore,
+  fetchAgendaForNext7Days,
+  fetchAgendaForPrevious7Days,
+} = store;
 const {
   doctor,
   appointmentBooked,
@@ -43,8 +47,8 @@ onBeforeMount(() => {
       :starting-date="startingDate"
       :available-slots="availableSlots"
       @slot-selected="(e) => console.log('slot selected: ', e)"
-      @previous-week-requested="() => console.log('previous week requested')"
-      @next-week-requested="() => console.log('next week requested')"
+      @previous-week-requested="fetchAgendaForPrevious7Days"
+      @next-week-requested="fetchAgendaForNext7Days"
     />
   </div>
 </template>

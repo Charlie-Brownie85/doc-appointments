@@ -163,7 +163,7 @@ function selectSlot(slot: AppointmentSlot) {
 
 .slots-container {
   @apply col-start-2 w-full row-start-1 grid grid-cols-7 border-b-2 border-base-300;
-  @apply max-h-[40vh] h-full overflow-hidden;
+  @apply max-h-[40vh] min-h-[40vh] h-full overflow-hidden;
   transition: max-height 0.5s ease-in-out;
 
   &--expanded {
