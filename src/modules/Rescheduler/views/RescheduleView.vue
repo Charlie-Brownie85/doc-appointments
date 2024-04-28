@@ -97,7 +97,6 @@ onBeforeMount(() => {
   </div>
   <VModal
     v-model="bookingError"
-    class="text-doc-blue-900"
   >
     <template #content>
       <div class="flex justify-center items-center">

@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
             <SVGIcon
               name="close"
               color="currentColor"
-              class="w-3 h-3"
+              class="w-3 h-3 text-doc-blue-900"
             />
           </button>
           <div data-testid="content">
