@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 
 import {
   isToday,
@@ -13,7 +13,7 @@ import i18n from '@/i18n';
 
 import { DATE_FORMATS } from '@/config';
 
-import type { AgendaDay } from '@/types';
+import type { AgendaDay, AppointmentSlot } from '@/types';
 
 export interface Props {
   startingDate: Date,
@@ -25,6 +25,8 @@ const props = defineProps<Props>();
 const emit = defineEmits(['slotSelected', 'previousWeekRequested', 'nextWeekRequested']);
 
 const { t } = i18n.global;
+
+const isFolded = ref(true);
 
 const days = computed(() => Array.from({ length: 7 }, (_, i) => addDays(props.startingDate, i)));
 
@@ -50,6 +52,10 @@ function formatWeekDay(date: Date): string {
 
   // TODO: locale options to translate this
   return formatDFNS(date, DATE_FORMATS.CALENDAR_WEEK_DAY);
+}
+
+function selectSlot(slot: AppointmentSlot) {
+  emit('slotSelected', slot);
 }
 </script>
 
@@ -98,10 +104,13 @@ function formatWeekDay(date: Date): string {
       </button>
     </div>
     <div
-      class="w-full grid grid-cols-[8%_1fr_8%] justify-items-center items-center"
+      class="w-full grid grid-cols-[8%_1fr_8%] grid-rows-[1fr_3.75rem] justify-items-center items-center"
       data-testid="calendarBody"
     >
-      <div class="slots-container col-start-2 w-full grid grid-cols-7">
+      <div
+        class="slots-container"
+        :class="{ 'slots-container--expanded': !isFolded }"
+      >
         <div
           v-for="day in agendaDays"
           :key="day.date.toDateString()"
@@ -112,11 +121,29 @@ function formatWeekDay(date: Date): string {
             :key="slot.start"
             class="appointment-slot"
             :class="{ 'appointment-slot--taken': slot.taken }"
-            @click="() => emit('slotSelected', slot)"
+            @click="selectSlot(slot)"
           >
             <span>{{ formatDFNS(slot.start, DATE_FORMATS.APPOINTMENT_TIME) }}</span>
           </div>
         </div>
+      </div>
+      <div
+        class="py-2 col-start-2 row-start-2"
+        data-testid="toggleContainer"
+      >
+        <button
+          type="button"
+          class="bg-transparent text-doc-blue-500 hover:underline flex justify-center items-center gap-2"
+          @click="isFolded = !isFolded"
+        >
+          <span class="text-base font-body font-semibold">{{ isFolded ? $t('See more hours') : $t('Less') }}</span>
+          <SVGIcon
+            name="chevron-down"
+            color="currentColor"
+            class="w-5 h-5 transition-transform duration-300 ease-in-out"
+            :class="{ 'rotate-x-180': !isFolded }"
+          />
+        </button>
       </div>
     </div>
   </div>
@@ -130,6 +157,16 @@ function formatWeekDay(date: Date): string {
 
   &:disabled {
     @apply cursor-not-allowed bg-base-200 text-doc-blue-300;
+  }
+}
+
+.slots-container {
+  @apply col-start-2 w-full row-start-1 grid grid-cols-7 border-b-2 border-base-300;
+  @apply max-h-[40vh] h-full overflow-hidden;
+  transition: max-height 0.5s ease-in-out;
+
+  &--expanded {
+    @apply max-h-[3000px] pb-3;
   }
 }
 
@@ -149,8 +186,12 @@ function formatWeekDay(date: Date): string {
     @apply bg-transparent cursor-not-allowed;
 
     span {
-      @apply text-base-500 line-through;
+      @apply text-base-400 line-through;
     }
   }
+}
+
+.rotate-x-180 {
+  transform: rotateX(180deg);
 }
 </style>
