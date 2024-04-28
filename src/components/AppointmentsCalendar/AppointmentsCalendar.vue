@@ -117,7 +117,7 @@ function selectSlot(slot: AppointmentSlot) {
         <div
           v-for="day in agendaDays"
           :key="day.date.toDateString()"
-          class="flex flex-col items-center gap-4"
+          class="flex flex-col items-center gap-3"
         >
           <AppointmentTimeSlot
             v-for="slot in day.availableSlots"
@@ -163,7 +163,7 @@ function selectSlot(slot: AppointmentSlot) {
 
 .slots-container {
   @apply col-start-2 w-full row-start-1 grid grid-cols-7 border-b-2 border-base-300;
-  @apply max-h-[20rem] min-h-[20rem] h-full overflow-hidden;
+  @apply max-h-[19rem] min-h-[19rem] h-full overflow-hidden;
   transition: max-height 0.5s ease-in-out;
 
   &--expanded {
