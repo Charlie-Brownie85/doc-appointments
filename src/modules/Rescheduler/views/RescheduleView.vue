@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useRescheduleStore } from '../store';
@@ -25,11 +25,23 @@ const {
   rescheduledSlotSelected,
   availableSlots,
   startingDate,
+  isFetchingSlots,
   isBookingSlot,
 } = storeToRefs(store);
 
+const fetchingError = ref(false);
+
 function selectSlot(slot: AppointmentSlot) {
   rescheduledSlotSelected.value = slot;
+}
+
+async function fetchAvailableSlots(when: 'next' | 'previous') {
+  const fetchAgenda = when === 'next' ? fetchAgendaForNext7Days : fetchAgendaForPrevious7Days;
+  try {
+    await fetchAgenda();
+  } catch (error) {
+    fetchingError.value = true;
+  }
 }
 
 onBeforeMount(() => {
@@ -59,9 +71,11 @@ onBeforeMount(() => {
     <AppointmentsCalendar
       :starting-date="startingDate"
       :available-slots="availableSlots"
+      :is-fetching-slots="isFetchingSlots"
+      :is-fetch-error="fetchingError"
       @slot-selected="selectSlot"
-      @previous-week-requested="fetchAgendaForPrevious7Days"
-      @next-week-requested="fetchAgendaForNext7Days"
+      @previous-week-requested="fetchAvailableSlots('previous')"
+      @next-week-requested="fetchAvailableSlots('next')"
     />
     <AppointmentRescheduler
       v-if="!!rescheduledSlotSelected"

@@ -41,7 +41,10 @@ export const useRescheduleStore = defineStore('reschedule', () => {
 
   const startingDate = ref(new Date());
   const rescheduledSlotSelected: Ref<AppointmentSlot | null> = ref(null);
+
   const isBookingSlot = ref(false);
+  const isFetchingSlots = ref(false);
+
   const availableSlots = ref<AgendaDay[]>([]);
 
   /**
@@ -77,9 +80,14 @@ export const useRescheduleStore = defineStore('reschedule', () => {
   }
 
   async function fetchAvailableSlots(mondayDate: string): Promise<AgendaDay[]> {
+    isFetchingSlots.value = true;
     const route = getApiRoute(availableSlotsEndpoint, { mondayDate });
-    const response = await apiRequest<AppointmentSlot[]>(route);
-    return groupAppointmentsByDate(PayloadFromServer(response.data));
+    try {
+      const response = await apiRequest<AppointmentSlot[]>(route);
+      return groupAppointmentsByDate(PayloadFromServer(response.data));
+    } finally {
+      isFetchingSlots.value = false;
+    }
   }
 
   async function fetch7DaysAgenda(date: Date): Promise<AgendaDay[]> {
@@ -125,8 +133,8 @@ export const useRescheduleStore = defineStore('reschedule', () => {
 
     try {
       await apiRequest<void>(bookSlotEndpoint, { requestMethod: 'post', data: payload });
-    } finally {
       availableSlots.value = await fetch7DaysAgenda(startingDate.value); // refetch data to update it
+    } finally {
       rescheduledSlotSelected.value = null;
       isBookingSlot.value = false;
     }
@@ -147,5 +155,6 @@ export const useRescheduleStore = defineStore('reschedule', () => {
     fetchAgendaForPrevious7Days,
     bookSlot,
     isBookingSlot,
+    isFetchingSlots,
   };
 });
