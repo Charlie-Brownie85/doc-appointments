@@ -1,0 +1,16 @@
+{
+  "An error occurred while booking your appointment.": "Se ha producido un error al reservar tu cita.",
+  "An error occurred while fetching the available slots.": "Se ha producido un error al obtener los horarios disponibles.",
+  "Click the button to confirm": "Haz clic en el botón para confirmar",
+  "Did you have an unexpected situation?": "¿Tuviste una situación inesperada?",
+  "Less": "Menos",
+  "On {date} at {time}": "El {date} a las {time}",
+  "Please try again": "Por favor, inténtalo de nuevo",
+  "Reschedule": "Reprogramar",
+  "See more hours": "Ver más horarios",
+  "Today": "Hoy",
+  "Tomorrow": "Mañana",
+  "You can change the appointment for when it suits you better.": "Puedes cambiar la cita para cuando mejor te convenga.",
+  "confirmAppointmentWith": "Confirma tu cita con {doctor}",
+  "{date} at {time}": "{date} a las {time}"
+}
