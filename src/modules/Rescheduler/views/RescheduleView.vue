@@ -60,7 +60,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container mx-auto">
     <i18n-t
       scope="global"
       keypath="confirmAppointmentWith"
