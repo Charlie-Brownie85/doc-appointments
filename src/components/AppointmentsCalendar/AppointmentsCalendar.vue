@@ -78,6 +78,7 @@ function selectSlot(slot: AppointmentSlot) {
           type="button"
           class="control-btn justify-self-start"
           @click="emit('previousWeekRequested')"
+          data-testid="previousWeekButton"
           :disabled="isPrevDisabled"
         >
           <SVGIcon
@@ -103,6 +104,7 @@ function selectSlot(slot: AppointmentSlot) {
         <button
           type="button"
           class="control-btn justify-self-end"
+          data-testid="nextWeekButton"
           @click="emit('nextWeekRequested')"
         >
           <SVGIcon

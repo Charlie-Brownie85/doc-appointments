@@ -1,4 +1,4 @@
-import type { AppointmentSlot } from '@/types';
+import type { AppointmentSlot, AgendaDay } from '@/types';
 
 export const slotsResults: AppointmentSlot[] = [
   {
@@ -111,5 +111,65 @@ export const slotsFor2Weeks: AppointmentSlot[] = [
   {
     start: '2024-05-03T08:30:00',
     end: '2024-05-03T08:40:00',
+  },
+];
+
+export const testAvailableSlots: AgendaDay[] = [
+  {
+    date: new Date('2024-05-27T10:30:00'),
+    availableSlots: [
+      {
+        start: '2024-05-27T10:30:00',
+        end: '2024-05-27T11:30:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2024-05-28T10:30:00'),
+    availableSlots: [
+      {
+        start: '2024-05-28T10:30:00',
+        end: '2024-05-28T11:30:00',
+      },
+      {
+        start: '2024-05-28T11:30:00',
+        end: '2024-05-28T12:30:00',
+      },
+      {
+        start: '2024-05-28T12:30:00',
+        end: '2024-05-28T13:30:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2024-05-29T10:30:00'),
+    availableSlots: [
+      {
+        start: '2024-05-29T10:30:00',
+        end: '2024-05-29T11:30:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2024-06-01T10:30:00'),
+    availableSlots: [
+      {
+        start: '2024-06-01T8:30:00',
+        end: '2024-06-01T9:30:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2024-06-02T10:30:00'),
+    availableSlots: [
+      {
+        start: '2024-06-02T8:30:00',
+        end: '2024-06-02T9:30:00',
+      },
+      {
+        start: '2024-06-02T9:30:00',
+        end: '2024-06-02T10:30:00',
+      },
+    ],
   },
 ];
